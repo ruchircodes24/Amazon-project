@@ -49,12 +49,35 @@ products.forEach((product) => {
         Added
         </div>
 
-        <button class="add-to-cart-button button-primary">
+        <button class="add-to-cart-button button-primary js-add-to-cart"
+        ${/**data-product-name = "${product.name
+            we'll not use product name to identify the products in the cart instead we'll use product id for it because id is unique but the name is not*/''}
+            data-product-id = "${product.id}"> ${/**using data attribute we can specify the product that needs to be added to the cart*/''}
         Add to Cart
         </button>
     </div>`; 
 });
 
-console.log(productsHTML);
-
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
+
+document.querySelectorAll('.js-add-to-cart').forEach((button) => {
+    button.addEventListener('click', () => {
+        const productId = button.dataset.productId; //to get the product id from the button we are using .dataset
+        
+        //button.dataset acts just like an object therefore to access the id of the product we write .productId
+
+        let matchingItem;
+        //check if the product is alredy in the cart and if it is there, increase the quantity by 1
+        cart.forEach((item) => {
+            if(productId === item.productId){
+                matchingItem = item;
+            }
+        });
+            if(matchingItem)
+                matchingItem.quantity += 1;
+            else
+                cart.push({productId: productId, quantity: 1
+        })
+        console.log(cart);
+    })
+})
