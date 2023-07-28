@@ -44,7 +44,7 @@ products.forEach((product) => {
 
         <div class="product-spacer"></div>
 
-        <div class="added-to-cart">
+        <div class="added-to-cart js-added-to-cart-${product.id}">
         <img src="images/icons/checkmark.png">
         Added
         </div>
@@ -60,9 +60,13 @@ products.forEach((product) => {
 
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
+let setTimeoutId;
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {
     button.addEventListener('click', () => {
-        const productId = button.dataset.productId; //to get the product id from the button we are using .dataset
+        const {productId} = button.dataset; 
+        //Destructuring- when the property name is same as the variable, we can write it in the above manner instead of- const productID = button.dataset.productId
+        
+        //to get the product id from the button we are using .dataset
         
         //button.dataset acts just like an object therefore to access the id of the product we write .productId
 
@@ -75,10 +79,7 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
                 matchingItem = item;
             }
         });
-            if(matchingItem)
-                matchingItem.quantity += quantitySelectorElem;
-            else
-                cart.push({productId: productId, quantity: 1
+            matchingItem ? matchingItem.quantity += quantitySelectorElem : cart.push({productId, quantity: 1
         })
 
         let cartQuantity = 0;
@@ -87,6 +88,17 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
         })
 
         document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+
+        let addedToCart = document.querySelector(`.js-added-to-cart-${productId}`)
+
+        addedToCart.classList.add('is-added');
         
-    })
-})
+        if(setTimeoutId){
+            clearTimeout(setTimeoutId);
+        }
+
+        setTimeoutId = setTimeout(() => {
+            addedToCart.classList.remove('is-added');
+        }, 2000);
+    })      
+})    
